@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+	<head>
+		<style>
+	.navbar {
+    overflow: hidden;
+    background-color: #333;
+    font-family: Arial, Helvetica, sans-serif;
+	}
+
+	.navbar a {
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+	}
+
+	.dropdown {
+    float: left;
+    overflow: hidden;
+	}
+
+	.dropdown .dropbtn {
+    font-size: 16px;    
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+	}
+
+	.navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+	}
+
+	.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+	}
+
+	.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+	}
+
+	.dropdown-content a:hover {
+    background-color: #ddd;
+	}
+
+	.dropdown:hover .dropdown-content {
+    display: block;
+	}
+	
+	label, column {
+		width: 160px;
+		float: right;
+		font: 11px bold Tahoma, Arial, sans-serif;
+		margin: 1px;
+		padding: 2px;
+	}
+	
+	.card{
+		
+		margin: auto;
+		width: 31.5%;
+		border: 3px solid #73AD21;
+		padding: 10px;
+		display:inline-block;
+		border-radius:10px;
+		box-shadow:black 5px 5px 5px;
+		background-color:white;
+		border-style: dashed black;
+		border-color:red;
+		text-align: center;
+        background-image: url("dd.jpg");
+        background-repeat: no-repeat;
+        background-size: 450px 350px;
+	}
+	
+	
+	.column {
+		float: left;
+		width: 33.33%;
+		padding: 15px;
+		text-align: center;
+	}
+	
+	h2{
+		
+		font-family:"Arial";
+		text-shadow:gray 6px 6px 6px;
+		color:red;
+		text-decoration:underline;
+		font-style: oblique;
+		text-align: center;
+		padding: 10px;
+		font-size:50pt;
+		
+	}
+	
+	h1{
+		
+		font-family:"Arial";
+		text-shadow:gray 2px 2px 2px;
+		color:black;
+		text-decoration:underline;
+		font-style: oblique;
+		
+	}
+	p1{font-family:"Arial";
+		text-shadow:gray 2px 2px 2px;
+		color:red;
+		font-style: oblique;
+		font-size:20pt;
+	}
+	p,a{
+		font-size:14pt;
+		font-family:"Arial";
+		color:black;
+		font-style: oblique;
+	}
+	
+	
+   body {
+        margin: 0;
+	}
+
+	/* Style the header */
+	.header {
+    background-color: black;
+    padding: 20px;
+    text-align: center;
+	font-size:25pt;
+	}
+	
+	body {
+    background-image: url("4444.jpeg");
+	background-size: 1600px 800px;
+	}
+	
+
+	
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+		
+		<script type="text/template" id="cardTemplate">
+				<div class='card'>
+					<h1> Leading Cause:{{leading_cause}} </h1>
+					<p> Deaths:{{deaths}} <hr>
+					<p> Death rate:{{death_rate}} </p><hr>
+					<p> Age adjusted death rate:{{age_adjusted_death_rate}}</p>
+				</div>
+		</script>
+		<script>	
+			var data;
+			function loadJSON(){				
+				$.getJSON("https://data.cityofnewyork.us/resource/uvxr-2jwn.json",function(results){
+					data=results;
+				})
+			}
+			function search(){
+				var build = "";
+				var race = document.getElementById("race");
+				var year = document.getElementById("year");
+				var sex = document.getElementById("sex");
+				var output = document.getElementById("output");
+				var cardTemplate = document.getElementById("cardTemplate").innerHTML;
+				for(var index = 0; index < data.length; index++){
+					try{
+	                    if(data[index].race_ethnicity == race.value || data[index].year == year.value || data[index].sex == sex.value){
+						build += Mustache.render(cardTemplate, data[index]);
+					}
+					}
+					catch(err){
+						console.log("Oops");
+					}
+				}
+					output.innerHTML = build;	
+			}
+			
+		</script>
+	</head>
+	<body onload="loadJSON()">
+		<div class="navbar">
+		<a href="home.html">Home</a>
+		<a href="about.html">About Us</a>
+		</div> 
+	</div>
+		<div class="header">
+		<h2>New York Death Note</h2>
+		</div>
+		<center><input type="text" id="race" placeholder="Enter what race it relates">
+		<input type="text" id="year" placeholder="Enter what year it is">
+		<input type="text" id="sex" placeholder="Enter what sex it relates">
+		<button onclick="search()">Search</button></center>
+		<div id="output"></div>
+</div>
+	</body>
+</html>    
